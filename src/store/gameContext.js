@@ -48,7 +48,7 @@ export function GameContextProvider(props) {
     const [botRoundChoice, setBotRoundChoice] = useState(null);
     const [userScore, setUserScore] = useState(0);
     const [botScore, setBotScore] = useState(0);
-    const [summary, setSummary] = useState("");
+    const [summary, setSummary] = useState([]);
     const handLandmarksRef = useRef(null);
     const userCardRef = useRef(null);
     const botCardRef = useRef(null);
@@ -80,7 +80,7 @@ export function GameContextProvider(props) {
         setBotRoundChoice(null);
         setUserScore(0);
         setBotScore(0);
-        setSummary("");
+        setSummary([]);
     }
 
     function startGame() {
@@ -102,7 +102,7 @@ export function GameContextProvider(props) {
         resetChoices();
         setUserScore(0);
         setBotScore(0);
-        setSummary("");
+        setSummary([]);
     }
 
     function resetChoices() {
@@ -152,7 +152,13 @@ export function GameContextProvider(props) {
             retryCount++;
             if (retryCount >= maxRetries) {
                 clearInterval(retryDetection);
-                setSummary(prev => `${prev}\nRound ${gameRound}: Unable to track your move. Please try again.`)
+                setSummary(prev => [
+                    ...prev,
+                    <div key={gameRound} className="mb-2">
+                        <span className="font-bold text-blue-600">Round {gameRound}:</span>{" "}
+                        <span className="text-red-500">Unable to track your move. Please try again.</span>
+                    </div>,
+                ])
                 resetChoices();
                 setRoundStatus("invalid");
                 setNetRound(prevRound => prevRound + 1);
@@ -183,14 +189,20 @@ export function GameContextProvider(props) {
             }
         }
 
-        setSummary(
-            (prev) =>
-                `${prev}\nRound ${gameRound}: Bot chose ${botChoice}, User chose ${userChoice}. ${roundWinner === "draw"
-                    ? "It's a draw"
-                    : `Winner: ${roundWinner}`
-                }.\n`
-        );
-
+        setSummary((prev) => [
+            ...prev,
+            <div key={gameRound} className="mb-2">
+                <span className="font-bold text-blue-600">Round {gameRound}:</span>{" "}
+                <span className="text-green-600">Bot chose {botChoice}, User chose {userChoice}. </span>
+                <span className="font-medium">
+                    {roundWinner === "draw" ? (
+                        <span className="text-yellow-500">It's a draw.</span>
+                    ) : (
+                        <span className="text-yellow-500">Winner: {roundWinner}.</span>
+                    )}
+                </span>
+            </div>,
+        ]);
         endRound();
     }
 

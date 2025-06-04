@@ -34,6 +34,7 @@ function GameCard() {
     return () => {
       clearTimeout(chooseTimeout);
     };
+    // eslint-disable-next-line
   }, [gameContext.roundStatus]);
 
   useEffect(() => {
@@ -46,7 +47,29 @@ function GameCard() {
     gameContext.updateScores();
 
     return () => {};
+    // eslint-disable-next-line
   }, [gameContext.botRoundChoice, gameContext.userRoundChoice]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      event.preventDefault();
+      if (gameContext.gameStatus === "ready" && event.key === "Enter") {
+        gameContext.startGame();
+      }
+      if (
+        gameContext.gameStatus === "started" &&
+        ["invalid", "completed"].includes(gameContext.roundStatus) &&
+        event.key === " "
+      ) {
+        gameContext.startRound();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+    // eslint-disable-next-line
+  }, [gameContext.gameStatus, gameContext.roundStatus]);
 
   return (
     <div className="card flex flex-col gap-2r" ref={gameContext.gameCardRef}>
@@ -111,13 +134,12 @@ function GameCard() {
         >
           Summary
         </label>
-        <textarea
+        <div
           id="summary"
-          rows="8"
-          value={gameContext.summary}
-          readOnly
-          className="border rounded-lg p-4 w-full resize-none bg-gray-100 text-gray-800 shadow-inner text-lg flex-1"
-        />
+          className="border rounded-lg p-4 w-full text-lg flex-1"
+        >
+          {gameContext.summary}
+        </div>
       </div>
     </div>
   );
