@@ -1,6 +1,5 @@
 import { createContext, useRef, useState } from "react";
 
-import constants from "./constants.js";
 import { detectMove } from "../logic/detectMove.js";
 
 const GameContext = createContext({
@@ -17,14 +16,17 @@ const GameContext = createContext({
     userScore: 0,
     botScore: 0,
     summary: "",
+    gameWinner: null,
     handLandmarksRef: null,
     userCardRef: null,
     botCardRef: null,
     gameCardRef: null,
+    summaryBoxRef: null,
     changeUserName: (name) => { },
     changeBotName: (name) => { },
     setGameAsReady: () => { },
     startGame: () => { },
+    restartGame: () => { },
     endGame: () => { },
     interruptGame: () => { },
     startRound: () => { },
@@ -49,10 +51,12 @@ export function GameContextProvider(props) {
     const [userScore, setUserScore] = useState(0);
     const [botScore, setBotScore] = useState(0);
     const [summary, setSummary] = useState([]);
+    const [gameWinner, setGameWinner] = useState(null);
     const handLandmarksRef = useRef(null);
     const userCardRef = useRef(null);
     const botCardRef = useRef(null);
     const gameCardRef = useRef(null);
+    const summaryBoxRef = useRef(null);
 
     function changeUserName(newUserName) {
         if (newUserName && /^[a-zA-Z ]+$/.test(newUserName)) {
@@ -70,17 +74,22 @@ export function GameContextProvider(props) {
         return false;
     }
 
-    function setGameAsReady() {
-        setGameStatus("ready");
-        setGameRound(1);
-        setNetRound(1);
+    function resetChoices() {
         setUserChoice(null);
         setBotChoice(null);
         setUserRoundChoice(null);
         setBotRoundChoice(null);
+    }
+
+    function setGameAsReady() {
+        setGameStatus("ready");
+        setGameRound(1);
+        setNetRound(1);
+        resetChoices();
         setUserScore(0);
         setBotScore(0);
         setSummary([]);
+        setGameWinner(null);
     }
 
     function startGame() {
@@ -89,9 +98,39 @@ export function GameContextProvider(props) {
         setRoundStatus("started");
     }
 
+    function restartGame() {
+        setGameRound(1);
+        setNetRound(1);
+        resetChoices();
+        setUserScore(0);
+        setBotScore(0);
+        setSummary([]);
+        setGameWinner(null);
+        setGameStatus("started");
+        setRoundStatus("started");
+    }
+
     function endGame() {
         setGameStatus("completed");
         setRoundStatus(null);
+        let winner = userScore > botScore ? "user" : userScore < botScore ? "bot" : "draw";
+        setGameWinner(winner);
+        if (winner === "draw") {
+            setSummary([
+                <div key="result" className="flex flex-col items-center justify-center h-full text-yellow-500">
+                    <div className="text-3xl font-bold my-10p">IT's</div>
+                    <div className="text-3xl font-bold my-10p">A</div>
+                    <div className="text-4xl font-bold my-10p uppercase">DRAW</div>
+                </div>
+            ])
+        } else {
+            setSummary([
+                <div key="result" className={`flex flex-col items-center justify-center h-full ${winner === "user" ? "text-green-500" : "text-red-500"}`}>
+                    <div className="text-4xl font-bold my-10p uppercase">{winner === "user" ? "YOU" : botName}</div>
+                    <div className="text-4xl font-bold my-10p uppercase">WON</div>
+                </div>
+            ])
+        }
     }
 
     function interruptGame() {
@@ -103,13 +142,7 @@ export function GameContextProvider(props) {
         setUserScore(0);
         setBotScore(0);
         setSummary([]);
-    }
-
-    function resetChoices() {
-        setUserChoice(null);
-        setBotChoice(null);
-        setUserRoundChoice(null);
-        setBotRoundChoice(null);
+        setGameWinner(null);
     }
 
     function startRound() {
@@ -118,10 +151,6 @@ export function GameContextProvider(props) {
     }
 
     function endRound() {
-        if (gameRound >= constants.MAX_ROUNDS) {
-            endGame();
-            return;
-        }
         setGameRound(prevRound => prevRound + 1);
         setNetRound(prevRound => prevRound + 1);
         setRoundStatus("completed");
@@ -220,13 +249,16 @@ export function GameContextProvider(props) {
         userScore,
         botScore,
         summary,
+        gameWinner,
         userCardRef,
         botCardRef,
         gameCardRef,
+        summaryBoxRef,
         changeUserName,
         changeBotName,
         setGameAsReady,
         startGame,
+        restartGame,
         endGame,
         interruptGame,
         startRound,

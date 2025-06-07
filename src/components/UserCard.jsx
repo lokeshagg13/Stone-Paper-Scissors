@@ -35,7 +35,7 @@ function UserCard() {
         setWebcamWidth(offsetWidth - 16);
         setWebcamHeight(offsetHeight - cardTitleRef.current.offsetHeight - 78);
         videoRef.current.stopWebcam();
-        setWebcamEnabled(false);
+        if (webcamEnabled) setWebcamEnabled(false);
       }
     };
     resizeWebcam();

@@ -8,15 +8,22 @@ function MainPanel() {
   const gameContext = useContext(GameContext);
 
   useEffect(() => {
-    if (gameContext.gameStatus !== "ready") return;
-    const userHeight = gameContext.userCardRef.current?.offsetHeight || 400;
-    console.log(userHeight);
+    if (gameContext.gameStatus === null) {
+      if (gameContext.userCardRef.current && gameContext.botCardRef.current) {
+        gameContext.userCardRef.current.style.height = `${gameContext.botCardRef.current.style.height}`;
+      }
+    } else if (gameContext.gameStatus === "ready") {
+      const userHeight = gameContext.userCardRef.current?.offsetHeight || 400;
 
-    // Apply max height to all cards
-    if (gameContext.botCardRef.current)
-      gameContext.botCardRef.current.style.height = `${userHeight}px`;
-    if (gameContext.gameCardRef.current)
-      gameContext.gameCardRef.current.style.height = `${userHeight}px`;
+      // Apply max height to all cards
+      if (gameContext.botCardRef.current)
+        gameContext.botCardRef.current.style.height = `${userHeight}px`;
+      if (gameContext.gameCardRef.current)
+        gameContext.gameCardRef.current.style.height = `${userHeight}px`;
+      if (gameContext.summaryBoxRef.current)
+        gameContext.summaryBoxRef.current.style.maxHeight = `${gameContext.summaryBoxRef.current.offsetHeight}px`;
+    }
+    // eslint-disable-next-line
   }, [gameContext.gameStatus]);
 
   return (

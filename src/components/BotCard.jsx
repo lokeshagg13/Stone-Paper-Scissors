@@ -4,11 +4,14 @@ import GameContext from "../store/gameContext";
 import StoneImage from "../images/stone.png";
 import PaperImage from "../images/paper.png";
 import ScissorsImage from "../images/scissors.png";
+import WonImage from "../images/won.png";
+import LostImage from "../images/lost.png";
+import DrawImage from "../images/draw.png";
 
 function BotCard() {
   const gameContext = useContext(GameContext);
 
-  const getImage = () => {
+  const getBotChoiceImage = () => {
     switch (gameContext.botChoice) {
       case "stone":
         return StoneImage;
@@ -18,6 +21,17 @@ function BotCard() {
         return ScissorsImage;
       default:
         return null;
+    }
+  };
+
+  const getBotWinStatus = () => {
+    switch (gameContext.gameWinner) {
+      case "bot":
+        return WonImage;
+      case "user":
+        return LostImage;
+      default:
+        return DrawImage;
     }
   };
 
@@ -33,13 +47,21 @@ function BotCard() {
           gameContext.botChoice && (
             <img
               key={gameContext.botRoundChoice}
-              src={getImage()}
+              src={getBotChoiceImage()}
               alt={gameContext.botChoice}
               className="pop-animation max-h-full max-w-full"
             />
           )
         ) : (
-          <p>Someone won!</p>
+          gameContext.gameStatus === "completed" &&
+          gameContext.gameWinner && (
+            <img
+              key={gameContext.gameWinner}
+              src={getBotWinStatus()}
+              alt={gameContext.gameWinner}
+              className="pop-animation max-h-full max-w-full"
+            />
+          )
         )}
       </div>
     </div>

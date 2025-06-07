@@ -15,7 +15,7 @@ const Webcam = forwardRef(({ width, height }, ref) => {
   const cameraRef = useRef(null);
   const handsRef = useRef(null);
   const [stream, setStream] = useState(null);
-  
+
   // Expose enable/disable methods to parent
   useImperativeHandle(ref, () => ({
     startWebcam: (mediaStream) => {
@@ -93,7 +93,7 @@ const Webcam = forwardRef(({ width, height }, ref) => {
         cameraRef.current.stop();
       }
     };
-  // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [width, height]);
 
   return (
