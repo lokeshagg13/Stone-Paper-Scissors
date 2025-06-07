@@ -1,6 +1,8 @@
 import { useContext, useEffect, useRef, useState } from "react";
+
 import Webcam from "./Webcam";
 import GameContext from "../store/gameContext";
+import UserName from "./names/UserName";
 
 function UserCard() {
   const gameContext = useContext(GameContext);
@@ -35,7 +37,7 @@ function UserCard() {
         setWebcamWidth(offsetWidth - 16);
         setWebcamHeight(offsetHeight - cardTitleRef.current.offsetHeight - 78);
         videoRef.current.stopWebcam();
-        if (webcamEnabled) setWebcamEnabled(false);
+        setWebcamEnabled(false);
       }
     };
     resizeWebcam();
@@ -69,9 +71,9 @@ function UserCard() {
       }`}
       ref={gameContext.userCardRef}
     >
-      <div className="text-center card-title" ref={cardTitleRef}>
-        User
-      </div>
+      <UserName ref={cardTitleRef} />
+
+      {/* Enable/Disable Webcam Section */}
       <div className="flex flex-1 items-center justify-center my-2">
         {error ? (
           <p>{error}</p>
@@ -85,6 +87,8 @@ function UserCard() {
           </button>
         )}
       </div>
+
+      {/* Webcam Display Section */}
       <div className={`${webcamEnabled ? "show" : "hide"}`}>
         <Webcam width={webcamWidth} height={webcamHeight} ref={videoRef} />
       </div>

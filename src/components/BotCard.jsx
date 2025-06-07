@@ -7,6 +7,7 @@ import ScissorsImage from "../images/scissors.png";
 import WonImage from "../images/won.png";
 import LostImage from "../images/lost.png";
 import DrawImage from "../images/draw.png";
+import BotName from "./names/BotName";
 
 function BotCard() {
   const gameContext = useContext(GameContext);
@@ -37,7 +38,7 @@ function BotCard() {
 
   return (
     <div className="card flex flex-col gap-8" ref={gameContext.botCardRef}>
-      <div className="text-center card-title">Bot</div>
+      <BotName />
       <div className="flex flex-1 items-center justify-center my-2">
         {gameContext.gameStatus === null ? (
           <p>Please press ENABLE WEBCAM for starting the game</p>

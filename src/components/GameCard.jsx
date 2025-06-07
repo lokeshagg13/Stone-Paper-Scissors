@@ -156,13 +156,13 @@ function GameCard() {
         <div className="flex items-center justify-between gap-5 w-full">
           <div className="flex flex-col items-center text-green-600">
             <div>
-              <strong>Bot</strong>
+              <strong>{gameContext.botName}</strong>
             </div>
             <div>{gameContext.botScore}</div>
           </div>
           <div className="flex flex-col items-center text-purple-600">
             <div>
-              <strong>User</strong>
+              <strong>{gameContext.userName}</strong>
             </div>
             <div>{gameContext.userScore}</div>
           </div>

@@ -702,6 +702,15 @@
   .border-purple-600 {
     border-color: var(--color-purple-600);
   }
+  .border-red-600 {
+    border-color: var(--color-red-600);
+  }
+  .border-red-600:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.5); /* Adds a subtle shadow in red */
+    border-color: rgb(220, 38, 38);
+  }
+
   .accent-green-500 {
     accent-color: #22c55e; /* Tailwind's green-500 */
   }

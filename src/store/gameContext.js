@@ -60,7 +60,7 @@ export function GameContextProvider(props) {
 
     function changeUserName(newUserName) {
         if (newUserName && /^[a-zA-Z ]+$/.test(newUserName)) {
-            setUserName(userChoice);
+            setUserName(newUserName);
             return true;
         }
         return false
@@ -222,7 +222,7 @@ export function GameContextProvider(props) {
             ...prev,
             <div key={gameRound} className="mb-2">
                 <span className="font-bold text-blue-600">Round {gameRound}:</span>{" "}
-                <span className="text-green-600">Bot chose {botChoice}, User chose {userChoice}. </span>
+                <span className="text-green-600">{botName} chose {botChoice}, {userName} chose {userChoice}. </span>
                 <span className="font-medium">
                     {roundWinner === "draw" ? (
                         <span className="text-yellow-500">It's a draw.</span>
