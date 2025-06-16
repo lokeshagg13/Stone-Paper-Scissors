@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.js": "/SPS/static/js/main.e354312c.js",
-    "static/media/won.png": "/SPS/static/media/won.94f86ca609f39cb9aeab.png",
-    "static/media/draw.png": "/SPS/static/media/draw.bb3d46f2400820dc4f4a.png",
-    "static/media/lost.png": "/SPS/static/media/lost.94e59f0395011dd91710.png",
-    "static/media/scissors.png": "/SPS/static/media/scissors.e534988d080b129f6292.png",
-    "static/media/paper.png": "/SPS/static/media/paper.86bdd42b24d8f87a3f72.png",
-    "static/media/stone.png": "/SPS/static/media/stone.b08970cb6d6be398fd13.png",
-    "static/media/header.png": "/SPS/static/media/header.364d3ee26303aed35c25.png",
-    "static/media/SPS.mp3": "/SPS/static/media/SPS.3ef3e54032e0eb51023d.mp3",
-    "index.html": "/SPS/index.html",
-    "main.e354312c.js.map": "/SPS/static/js/main.e354312c.js.map"
+    "main.js": "/Stone-Paper-Scissors/static/js/main.678af467.js",
+    "static/media/won.png": "/Stone-Paper-Scissors/static/media/won.94f86ca609f39cb9aeab.png",
+    "static/media/draw.png": "/Stone-Paper-Scissors/static/media/draw.bb3d46f2400820dc4f4a.png",
+    "static/media/lost.png": "/Stone-Paper-Scissors/static/media/lost.94e59f0395011dd91710.png",
+    "static/media/scissors.png": "/Stone-Paper-Scissors/static/media/scissors.e534988d080b129f6292.png",
+    "static/media/paper.png": "/Stone-Paper-Scissors/static/media/paper.86bdd42b24d8f87a3f72.png",
+    "static/media/stone.png": "/Stone-Paper-Scissors/static/media/stone.b08970cb6d6be398fd13.png",
+    "static/media/header.png": "/Stone-Paper-Scissors/static/media/header.364d3ee26303aed35c25.png",
+    "static/media/SPS.mp3": "/Stone-Paper-Scissors/static/media/SPS.3ef3e54032e0eb51023d.mp3",
+    "index.html": "/Stone-Paper-Scissors/index.html",
+    "main.678af467.js.map": "/Stone-Paper-Scissors/static/js/main.678af467.js.map"
   },
   "entrypoints": [
-    "static/js/main.e354312c.js"
+    "static/js/main.678af467.js"
   ]
 }

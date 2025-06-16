@@ -1,6 +1,6 @@
 {
   "name": "stone-paper-scissors",
-  "homepage": "https://lokeshagg13.github.io/SPS",
+  "homepage": "https://lokeshagg13.github.io/Stone-Paper-Scissors",
   "main": "src/index.jsx",
   "version": "0.1.0",
   "dependencies": {
