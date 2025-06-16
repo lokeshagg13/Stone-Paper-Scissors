@@ -30,11 +30,14 @@ function GameCard() {
   }, [gameContext.gameStatus]);
 
   useEffect(() => {
-    if (gameContext.gameRound > constants.MAX_ROUNDS) {
+    if (
+      gameContext.roundStatus === "completed" &&
+      gameContext.gameRound >= constants.MAX_ROUNDS
+    ) {
       gameContext.endGame();
     }
     // eslint-disable-next-line
-  }, [gameContext.netRound, gameContext.gameRound]);
+  }, [gameContext.netRound, gameContext.gameRound, gameContext.roundStatus]);
 
   useEffect(() => {
     if (gameContext.summaryBoxRef.current) {
@@ -147,27 +150,30 @@ function GameCard() {
       </div>
 
       {/* Round Info Section */}
-      <div className="flex flex-col gap-1r justify-between items-center text-xl font-semibold bg-white p-4 rounded-lg shadow-md">
-        <div className="flex items-center">
-          <strong className="text-blue-600">
-            Round {Math.min(gameContext.gameRound, constants.MAX_ROUNDS)}
-          </strong>
-        </div>
-        <div className="flex items-center justify-between gap-5 w-full">
-          <div className="flex flex-col items-center text-green-600">
-            <div>
-              <strong>{gameContext.botName}</strong>
-            </div>
-            <div>{gameContext.botScore}</div>
+      {(gameContext.gameStatus === "started" ||
+        gameContext.gameStatus === "completed") && (
+        <div className="flex flex-col gap-1r justify-between items-center text-xl font-semibold bg-white p-4 rounded-lg shadow-md">
+          <div className="flex items-center">
+            <strong className="text-blue-600">
+              Round {Math.min(gameContext.gameRound, constants.MAX_ROUNDS)}
+            </strong>
           </div>
-          <div className="flex flex-col items-center text-purple-600">
-            <div>
-              <strong>{gameContext.userName}</strong>
+          <div className="flex items-center justify-between gap-5 w-full">
+            <div className="flex flex-col items-center text-green-600">
+              <div>
+                <strong>{gameContext.botName}</strong>
+              </div>
+              <div>{gameContext.botScore}</div>
             </div>
-            <div>{gameContext.userScore}</div>
+            <div className="flex flex-col items-center text-purple-600">
+              <div>
+                <strong>{gameContext.userName}</strong>
+              </div>
+              <div>{gameContext.userScore}</div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Summary Section */}
       <div className="flex flex-col p-4 rounded-lg shadow-md flex-1">

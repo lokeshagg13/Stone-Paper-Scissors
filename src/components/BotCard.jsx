@@ -41,7 +41,7 @@ function BotCard() {
       <BotName />
       <div className="flex flex-1 items-center justify-center my-2">
         {gameContext.gameStatus === null ? (
-          <p>Please press ENABLE WEBCAM for starting the game</p>
+          <p className="text-black px-4 text-center">Please press ENABLE WEBCAM for starting the game</p>
         ) : gameContext.gameStatus === "ready" ? (
           <></>
         ) : gameContext.gameStatus === "started" ? (

@@ -79,6 +79,7 @@ export function GameContextProvider(props) {
         setBotChoice(null);
         setUserRoundChoice(null);
         setBotRoundChoice(null);
+        handLandmarksRef.current = null;
     }
 
     function setGameAsReady() {
@@ -147,12 +148,12 @@ export function GameContextProvider(props) {
 
     function startRound() {
         setRoundStatus("started");
+        setGameRound(prevRound => prevRound + 1);
+        setNetRound(prevRound => prevRound + 1);
         resetChoices();
     }
 
     function endRound() {
-        setGameRound(prevRound => prevRound + 1);
-        setNetRound(prevRound => prevRound + 1);
         setRoundStatus("completed");
     }
 
