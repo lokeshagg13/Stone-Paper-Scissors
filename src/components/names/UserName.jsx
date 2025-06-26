@@ -2,10 +2,13 @@ import { forwardRef, useContext, useState } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
+import gameConfig from "../../logic/config";
 import GameContext from "../../store/gameContext";
 import EditIcon from "../ui/EditIcon";
 import CrossIcon from "../ui/CrossIcon";
 import CheckIcon from "../ui/CheckIcon";
+
+const { COMPLETED } = gameConfig.GAME_STATUS;
 
 const UserName = forwardRef((_, ref) => {
   const gameContext = useContext(GameContext);
@@ -63,7 +66,7 @@ const UserName = forwardRef((_, ref) => {
       ref={ref}
     >
       {gameContext.gameStatus === null ||
-      gameContext.gameStatus === "completed" ? (
+      gameContext.gameStatus === COMPLETED ? (
         isEditing ? (
           <>
             <OverlayTrigger

@@ -43,6 +43,7 @@ Stone Paper Scissors/
     ├── logic/
     │   ├── detectMove.js
     │   ├── vectorUtils.js
+    │   ├── config.js
     ├── components/
     │   ├── GameCard.jsx
     │   ├── BotCard.jsx
@@ -59,7 +60,6 @@ Stone Paper Scissors/
     ├── audio/
     │   ├── SPS.mp3
     ├── store/
-        ├── constants.js
         ├── gameContext.js
 ```
 
@@ -89,7 +89,7 @@ Stone Paper Scissors/
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/lokeshagg13/Stone-Paper-Scissors .git
+   git clone https://github.com/lokeshagg13/Stone-Paper-Scissors.git
    ```
 2. Navigate to the project directory:
 

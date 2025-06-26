@@ -1,4 +1,7 @@
+import gameConfig from "./config.js";
 import { getVector, normalize, angleBetween } from "./vectorUtils.js";
+
+const { STONE, PAPER, SCISSORS } = gameConfig.CHOICE;
 
 export function detectFingerStatesWithOrientation(landmarks) {
     const palmVector = getVector(landmarks[0], landmarks[9]); // Wrist to middle MCP
@@ -26,13 +29,13 @@ export function detectMove(landmarks) {
 
     const fingerStatuses = detectFingerStatesWithOrientation(landmarks);
     if (!fingerStatuses.index && !fingerStatuses.middle) {
-        return "stone"
+        return STONE;
     }
     if (fingerStatuses.index && fingerStatuses.middle && fingerStatuses.ring) {
-        return "paper"
+        return PAPER;
     }
     if (fingerStatuses.index && fingerStatuses.middle && !fingerStatuses.ring) {
-        return "scissors"
+        return SCISSORS;
     }
     return null
 }

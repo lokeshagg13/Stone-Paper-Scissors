@@ -1,8 +1,12 @@
 import { useContext, useEffect } from "react";
+
+import gameConfig from "../logic/config";
 import BotCard from "./BotCard";
 import UserCard from "./UserCard";
 import GameContext from "../store/gameContext";
 import GameCard from "./GameCard";
+
+const { READY } = gameConfig.GAME_STATUS;
 
 function MainPanel() {
   const gameContext = useContext(GameContext);
@@ -12,7 +16,7 @@ function MainPanel() {
       if (gameContext.userCardRef.current && gameContext.botCardRef.current) {
         gameContext.userCardRef.current.style.height = `${gameContext.botCardRef.current.style.height}`;
       }
-    } else if (gameContext.gameStatus === "ready") {
+    } else if (gameContext.gameStatus === READY) {
       const userHeight = gameContext.userCardRef.current?.offsetHeight || 400;
 
       // Apply max height to all cards

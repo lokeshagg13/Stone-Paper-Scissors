@@ -1,8 +1,12 @@
 import { useEffect, useContext, useRef } from "react";
+
+import gameConfig from "../logic/config";
 import GameContext from "../store/gameContext";
 
 import SPSAudio from "../audio/SPS.mp3";
-import constants from "../store/constants";
+
+const { READY, STARTED, COMPLETED } = gameConfig.GAME_STATUS;
+const { INVALID } = gameConfig.ROUND_STATUS;
 
 function GameCard() {
   const gameContext = useContext(GameContext);
@@ -19,8 +23,8 @@ function GameCard() {
 
   useEffect(() => {
     if (
-      gameContext.gameStatus === "ready" ||
-      gameContext.gameStatus === "started"
+      gameContext.gameStatus === READY ||
+      gameContext.gameStatus === STARTED
     ) {
       window.scrollTo({
         top: document.body.scrollHeight,
@@ -31,8 +35,8 @@ function GameCard() {
 
   useEffect(() => {
     if (
-      gameContext.roundStatus === "completed" &&
-      gameContext.gameRound >= constants.MAX_ROUNDS
+      gameContext.roundStatus === COMPLETED &&
+      gameContext.gameRound >= gameConfig.MAX_ROUNDS
     ) {
       gameContext.endGame();
     }
@@ -47,7 +51,7 @@ function GameCard() {
   }, [gameContext.summary, gameContext.summaryBoxRef]);
 
   useEffect(() => {
-    if (gameContext.roundStatus !== "started") {
+    if (gameContext.roundStatus !== STARTED) {
       return;
     }
 
@@ -85,15 +89,15 @@ function GameCard() {
     const handleKeyDown = (event) => {
       event.preventDefault();
       if (
-        (gameContext.gameStatus === "ready" ||
-          gameContext.gameStatus === "completed") &&
+        (gameContext.gameStatus === READY ||
+          gameContext.gameStatus === COMPLETED) &&
         event.key === "Enter"
       ) {
         gameContext.startGame();
       }
       if (
-        gameContext.gameStatus === "started" &&
-        ["invalid", "completed"].includes(gameContext.roundStatus) &&
+        gameContext.gameStatus === STARTED &&
+        [INVALID, COMPLETED].includes(gameContext.roundStatus) &&
         event.key === " "
       ) {
         gameContext.startRound();
@@ -110,22 +114,22 @@ function GameCard() {
     <div className="card flex flex-col gap-2r" ref={gameContext.gameCardRef}>
       {/* Game Status and Button Section */}
       <div className="flex justify-center my-4">
-        {gameContext.gameStatus === "ready" ? (
+        {gameContext.gameStatus === READY ? (
           <button
             onClick={gameContext.startGame}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg cursor-pointer hover:bg-blue-700 transition duration-300 text-lg font-medium shadow-md"
           >
             Start Game
           </button>
-        ) : gameContext.gameStatus === "started" ? (
-          gameContext.roundStatus === "invalid" ? (
+        ) : gameContext.gameStatus === STARTED ? (
+          gameContext.roundStatus === INVALID ? (
             <button
               onClick={gameContext.startRound}
               className="bg-red-500 text-white px-6 py-3 rounded-lg cursor-pointer hover:bg-red-600 transition duration-300 text-lg font-medium shadow-md"
             >
               Try Again
             </button>
-          ) : gameContext.roundStatus === "completed" ? (
+          ) : gameContext.roundStatus === COMPLETED ? (
             <button
               onClick={gameContext.startRound}
               className="bg-green-500 text-white px-6 py-3 rounded-lg cursor-pointer hover:bg-green-600 transition duration-300 text-lg font-medium shadow-md"
@@ -137,7 +141,7 @@ function GameCard() {
               Round Ongoing
             </button>
           )
-        ) : gameContext.gameStatus === "completed" ? (
+        ) : gameContext.gameStatus === COMPLETED ? (
           <button
             onClick={gameContext.restartGame}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg cursor-pointer hover:bg-blue-700 transition duration-300 text-lg font-medium shadow-md"
@@ -150,12 +154,12 @@ function GameCard() {
       </div>
 
       {/* Round Info Section */}
-      {(gameContext.gameStatus === "started" ||
-        gameContext.gameStatus === "completed") && (
+      {(gameContext.gameStatus === STARTED ||
+        gameContext.gameStatus === COMPLETED) && (
         <div className="flex flex-col gap-1r justify-between items-center text-xl font-semibold bg-white p-4 rounded-lg shadow-md">
           <div className="flex items-center">
             <strong className="text-blue-600">
-              Round {Math.min(gameContext.gameRound, constants.MAX_ROUNDS)}
+              Round {Math.min(gameContext.gameRound, gameConfig.MAX_ROUNDS)}
             </strong>
           </div>
           <div className="flex items-center justify-between gap-5 w-full">

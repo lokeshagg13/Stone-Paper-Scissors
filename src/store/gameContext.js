@@ -1,14 +1,20 @@
 import { createContext, useRef, useState } from "react";
 
+import gameConfig from "../logic/config.js";
 import { detectMove } from "../logic/detectMove.js";
+
+const { STONE, PAPER, SCISSORS } = gameConfig.CHOICE;
+const { READY, STARTED, COMPLETED } = gameConfig.GAME_STATUS;
+const { INVALID } = gameConfig.ROUND_STATUS;
+const { DRAW, USER, BOT } = gameConfig.WINNER;
 
 const GameContext = createContext({
     gameStatus: null,
     gameRound: 0,     // updated only in case of a valid round
     netRound: 0,     // updated even in case of an invalid round
     roundStatus: null,
-    userName: "User",
-    botName: "Bot",
+    userName: gameConfig.DEFAULT_USER_NAME,
+    botName: gameConfig.DEFAULT_BOT_NAME,
     userChoice: null,
     botChoice: null,
     userRoundChoice: null,
@@ -42,8 +48,8 @@ export function GameContextProvider(props) {
     const [gameRound, setGameRound] = useState(0);
     const [netRound, setNetRound] = useState(0);
     const [roundStatus, setRoundStatus] = useState(null);
-    const [userName, setUserName] = useState("User");
-    const [botName, setBotName] = useState("Bot");
+    const [userName, setUserName] = useState(gameConfig.DEFAULT_USER_NAME);
+    const [botName, setBotName] = useState(gameConfig.DEFAULT_BOT_NAME);
     const [userChoice, setUserChoice] = useState(null);
     const [botChoice, setBotChoice] = useState(null);
     const [userRoundChoice, setUserRoundChoice] = useState(null);
@@ -83,7 +89,7 @@ export function GameContextProvider(props) {
     }
 
     function setGameAsReady() {
-        setGameStatus("ready");
+        setGameStatus(READY);
         setGameRound(1);
         setNetRound(1);
         resetChoices();
@@ -94,9 +100,9 @@ export function GameContextProvider(props) {
     }
 
     function startGame() {
-        if (gameStatus !== "ready") return;
-        setGameStatus("started");
-        setRoundStatus("started");
+        if (gameStatus !== READY) return;
+        setGameStatus(STARTED);
+        setRoundStatus(STARTED);
     }
 
     function restartGame() {
@@ -107,16 +113,16 @@ export function GameContextProvider(props) {
         setBotScore(0);
         setSummary([]);
         setGameWinner(null);
-        setGameStatus("started");
-        setRoundStatus("started");
+        setGameStatus(STARTED);
+        setRoundStatus(STARTED);
     }
 
     function endGame() {
-        setGameStatus("completed");
+        setGameStatus(COMPLETED);
         setRoundStatus(null);
-        let winner = userScore > botScore ? "user" : userScore < botScore ? "bot" : "draw";
+        let winner = userScore > botScore ? USER : userScore < botScore ? BOT : DRAW;
         setGameWinner(winner);
-        if (winner === "draw") {
+        if (winner === DRAW) {
             setSummary([
                 <div key="result" className="flex flex-col items-center justify-center h-full text-yellow-500">
                     <div className="text-3xl font-bold my-10p">IT's</div>
@@ -126,8 +132,8 @@ export function GameContextProvider(props) {
             ])
         } else {
             setSummary([
-                <div key="result" className={`flex flex-col items-center justify-center h-full ${winner === "user" ? "text-green-500" : "text-red-500"}`}>
-                    <div className="text-4xl font-bold my-10p uppercase">{winner === "user" ? "YOU" : botName}</div>
+                <div key="result" className={`flex flex-col items-center justify-center h-full ${winner === USER ? "text-green-500" : "text-red-500"}`}>
+                    <div className="text-4xl font-bold my-10p uppercase">{winner === USER ? "YOU" : botName}</div>
                     <div className="text-4xl font-bold my-10p uppercase">WON</div>
                 </div>
             ])
@@ -147,14 +153,14 @@ export function GameContextProvider(props) {
     }
 
     function startRound() {
-        setRoundStatus("started");
+        setRoundStatus(STARTED);
         setGameRound(prevRound => prevRound + 1);
         setNetRound(prevRound => prevRound + 1);
         resetChoices();
     }
 
     function endRound() {
-        setRoundStatus("completed");
+        setRoundStatus(COMPLETED);
     }
 
     function updateHandLandmarks(landmarks) {
@@ -173,7 +179,7 @@ export function GameContextProvider(props) {
                 const move = detectMove(handLandmarksRef.current);
                 if (move !== null) {
                     clearInterval(retryDetection);
-                    if (roundStatus === "invalid") setRoundStatus("started");
+                    if (roundStatus === INVALID) setRoundStatus(STARTED);
                     setUserChoice(move);
                     setUserRoundChoice(`${netRound}_${move}`);
                     return;
@@ -190,16 +196,17 @@ export function GameContextProvider(props) {
                     </div>,
                 ])
                 resetChoices();
-                setRoundStatus("invalid");
+                setRoundStatus(INVALID);
                 setNetRound(prevRound => prevRound + 1);
             }
         }, retryInterval);
     }
 
     function makeBotChoice() {
-        const randomChoice = ["stone", "paper", "scissors"][
+        const randomChoice = Object.keys(gameConfig.CHOICE)[
             Math.floor(Math.random() * 3)
         ];
+        console.log(randomChoice);
         setBotChoice(randomChoice);
         setBotRoundChoice(`${netRound}_${randomChoice}`);
     }
@@ -207,9 +214,9 @@ export function GameContextProvider(props) {
     function updateScores() {
         let roundWinner;
         if (botChoice === userChoice) {
-            roundWinner = "draw";
+            roundWinner = DRAW;
         } else {
-            if ((botChoice === "stone" && userChoice === "scissors") || (botChoice === "scissors" && userChoice === "paper") || (botChoice === "paper" && userChoice === "stone")) {
+            if ((botChoice === STONE && userChoice === SCISSORS) || (botChoice === SCISSORS && userChoice === PAPER) || (botChoice === PAPER && userChoice === STONE)) {
                 roundWinner = botName;
                 setBotScore(prevScore => prevScore + 1);
             }
@@ -225,7 +232,7 @@ export function GameContextProvider(props) {
                 <span className="font-bold text-blue-600">Round {gameRound}:</span>{" "}
                 <span className="text-green-600">{botName} chose {botChoice}, {userName} chose {userChoice}. </span>
                 <span className="font-medium">
-                    {roundWinner === "draw" ? (
+                    {roundWinner === DRAW ? (
                         <span className="text-yellow-500">It's a draw.</span>
                     ) : (
                         <span className="text-yellow-500">Winner: {roundWinner}.</span>
