@@ -111,7 +111,7 @@ function GameCard() {
   }, [gameContext.gameStatus, gameContext.roundStatus]);
 
   return (
-    <div className="card flex flex-col gap-2r" ref={gameContext.gameCardRef}>
+    <div className="card flex flex-col gap-2r">
       {/* Game Status and Button Section */}
       <div className="flex justify-center my-4">
         {gameContext.gameStatus === READY ? (
@@ -190,7 +190,9 @@ function GameCard() {
 
         <div
           id="summary"
-          className="border rounded-lg p-4 w-full text-lg flex-1 overflow-y-auto"
+          className={`border rounded-lg p-4 w-full text-lg overflow-y-auto flex-1 ${
+            gameContext.gameStatus === STARTED ? "summary-height-adjust" : ""
+          }`}
           ref={gameContext.summaryBoxRef}
         >
           {gameContext.summary}

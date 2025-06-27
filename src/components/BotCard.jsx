@@ -42,7 +42,7 @@ function BotCard() {
   };
 
   return (
-    <div className="card flex flex-col gap-8" ref={gameContext.botCardRef}>
+    <div className="card flex flex-col gap-8">
       <BotName />
       <div className="flex flex-1 items-center justify-center my-2">
         {gameContext.gameStatus === null ? (
@@ -52,7 +52,7 @@ function BotCard() {
         ) : gameContext.gameStatus === READY ? (
           <></>
         ) : gameContext.gameStatus === STARTED ? (
-          gameContext.botChoice && (
+          gameContext.botChoice !== null && (
             <img
               key={gameContext.botRoundChoice}
               src={getBotChoiceImage()}
@@ -62,7 +62,7 @@ function BotCard() {
           )
         ) : (
           gameContext.gameStatus === COMPLETED &&
-          gameContext.gameWinner && (
+          gameContext.gameWinner !== null && (
             <img
               key={gameContext.gameWinner}
               src={getBotWinStatus()}

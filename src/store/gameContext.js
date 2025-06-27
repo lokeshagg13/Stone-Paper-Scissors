@@ -24,9 +24,6 @@ const GameContext = createContext({
     summary: "",
     gameWinner: null,
     handLandmarksRef: null,
-    userCardRef: null,
-    botCardRef: null,
-    gameCardRef: null,
     summaryBoxRef: null,
     changeUserName: (name) => { },
     changeBotName: (name) => { },
@@ -59,9 +56,6 @@ export function GameContextProvider(props) {
     const [summary, setSummary] = useState([]);
     const [gameWinner, setGameWinner] = useState(null);
     const handLandmarksRef = useRef(null);
-    const userCardRef = useRef(null);
-    const botCardRef = useRef(null);
-    const gameCardRef = useRef(null);
     const summaryBoxRef = useRef(null);
 
     function changeUserName(newUserName) {
@@ -153,10 +147,11 @@ export function GameContextProvider(props) {
     }
 
     function startRound() {
-        setRoundStatus(STARTED);
-        setGameRound(prevRound => prevRound + 1);
+        if (roundStatus === COMPLETED)
+            setGameRound(prevRound => prevRound + 1);
         setNetRound(prevRound => prevRound + 1);
         resetChoices();
+        setRoundStatus(STARTED);
     }
 
     function endRound() {
@@ -190,7 +185,7 @@ export function GameContextProvider(props) {
                 clearInterval(retryDetection);
                 setSummary(prev => [
                     ...prev,
-                    <div key={gameRound} className="mb-2">
+                    <div key={netRound} className="mb-2">
                         <span className="font-bold text-blue-600">Round {gameRound}:</span>{" "}
                         <span className="text-red-500">Unable to track your move. Please try again.</span>
                     </div>,
@@ -203,10 +198,10 @@ export function GameContextProvider(props) {
     }
 
     function makeBotChoice() {
-        const randomChoice = Object.keys(gameConfig.CHOICE)[
-            Math.floor(Math.random() * 3)
+        const choices = Object.values(gameConfig.CHOICE);
+        const randomChoice = choices[
+            Math.floor(Math.random() * choices.length)
         ];
-        console.log(randomChoice);
         setBotChoice(randomChoice);
         setBotRoundChoice(`${netRound}_${randomChoice}`);
     }
@@ -226,11 +221,13 @@ export function GameContextProvider(props) {
             }
         }
 
+        const choices = Object.keys(gameConfig.CHOICE);
+
         setSummary((prev) => [
             ...prev,
-            <div key={gameRound} className="mb-2">
+            <div key={netRound} className="mb-2">
                 <span className="font-bold text-blue-600">Round {gameRound}:</span>{" "}
-                <span className="text-green-600">{botName} chose {botChoice}, {userName} chose {userChoice}. </span>
+                <span className="text-green-600">{botName} chose {choices[botChoice]}, {userName} chose {choices[userChoice]}. </span>
                 <span className="font-medium">
                     {roundWinner === DRAW ? (
                         <span className="text-yellow-500">It's a draw.</span>
@@ -258,9 +255,6 @@ export function GameContextProvider(props) {
         botScore,
         summary,
         gameWinner,
-        userCardRef,
-        botCardRef,
-        gameCardRef,
         summaryBoxRef,
         changeUserName,
         changeBotName,

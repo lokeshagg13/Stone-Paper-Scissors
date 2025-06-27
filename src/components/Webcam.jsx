@@ -8,7 +8,7 @@ import {
 } from "react";
 import GameContext from "../store/gameContext";
 
-const Webcam = forwardRef(({ width, height }, ref) => {
+const Webcam = forwardRef((_, ref) => {
   const gameContext = useContext(GameContext);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -61,8 +61,8 @@ const Webcam = forwardRef(({ width, height }, ref) => {
       ctx.restore();
     };
 
-    canvasRef.current.width = width;
-    canvasRef.current.height = height;
+    const width = canvasRef.current.width;
+    const height = canvasRef.current.height;
 
     const hands = new window.Hands({
       locateFile: (file) =>
@@ -94,15 +94,15 @@ const Webcam = forwardRef(({ width, height }, ref) => {
       }
     };
     // eslint-disable-next-line
-  }, [width, height]);
+  }, []);
 
   return (
     <>
       <video className="input-video hide" ref={videoRef}></video>
       <canvas
-        className="output-canvas"
-        width={width}
-        height={height}
+        className="output-canvas w-full h-full"
+        width="1000"
+        height="1000"
         ref={canvasRef}
       ></canvas>
     </>

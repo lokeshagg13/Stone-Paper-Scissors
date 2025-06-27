@@ -9,8 +9,6 @@ function UserCard() {
   const videoRef = useRef(null);
   const cardTitleRef = useRef(null);
   const [error, setError] = useState(null);
-  const [webcamWidth, setWebcamWidth] = useState(0);
-  const [webcamHeight, setWebcamHeight] = useState(0);
   const [webcamEnabled, setWebcamEnabled] = useState(false);
 
   useEffect(() => {
@@ -29,22 +27,6 @@ function UserCard() {
     }
     // eslint-disable-next-line
   }, [webcamEnabled]);
-
-  useEffect(() => {
-    const resizeWebcam = () => {
-      if (gameContext.userCardRef.current) {
-        const { offsetWidth, offsetHeight } = gameContext.userCardRef.current;
-        setWebcamWidth(offsetWidth - 16);
-        setWebcamHeight(offsetHeight - cardTitleRef.current.offsetHeight - 78);
-        videoRef.current.stopWebcam();
-        setWebcamEnabled(false);
-      }
-    };
-    resizeWebcam();
-    window.addEventListener("resize", () => resizeWebcam());
-    return () => window.removeEventListener("resize", () => resizeWebcam());
-    // eslint-disable-next-line
-  }, []);
 
   const enableWebcam = async () => {
     try {
@@ -65,16 +47,15 @@ function UserCard() {
   };
 
   return (
-    <div
-      className={`card flex flex-col gap-8 ${
-        webcamEnabled ? "card-adjust" : ""
-      }`}
-      ref={gameContext.userCardRef}
-    >
+    <div className="card flex flex-col gap-8">
       <UserName ref={cardTitleRef} />
 
       {/* Enable/Disable Webcam Section */}
-      <div className="flex flex-1 items-center justify-center my-2">
+      <div
+        className={`flex items-center justify-center my-2 ${
+          !webcamEnabled ? "flex-1" : ""
+        }`}
+      >
         {error ? (
           <p>{error}</p>
         ) : !webcamEnabled ? (
@@ -89,8 +70,8 @@ function UserCard() {
       </div>
 
       {/* Webcam Display Section */}
-      <div className={`${webcamEnabled ? "show" : "hide"}`}>
-        <Webcam width={webcamWidth} height={webcamHeight} ref={videoRef} />
+      <div className={`flex-1 ${webcamEnabled ? "show" : "hide"}`}>
+        <Webcam ref={videoRef} />
       </div>
     </div>
   );

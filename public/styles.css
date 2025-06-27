@@ -11,18 +11,63 @@
   }
 
   .app-grid {
-    display: grid;
-    grid-template-rows: 20% 80%;
-  }
-
-  .inner-grid {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
-    padding: 1rem;
   }
 
   .inner-grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    gap: 2rem;
+    padding: 1rem;
+    flex: 1;
+    flex-wrap: wrap;
+  }
+
+  .img-fit {
+    max-height: 200px;
+  }
+
+  .col1 {
+    flex: 0.4;
+    min-width: 320px;
+  }
+
+  .col2 {
+    flex: 0.4;
+    min-width: 320px;
+  }
+
+  .col3 {
+    flex: 0.2;
+  }
+
+  @media (min-width: 736px) and (max-width: 1000px) {
+    .col1 {
+      flex: 0.5;
+    }
+    .col2 {
+      flex: 0.5;
+    }
+    .col3 {
+      flex: 1;
+      min-width: 100%;
+    }
+  }
+
+  @media (max-width: 735px) {
+    .col1 {
+      flex: 1;
+      min-width: 100%;
+    }
+    .col2 {
+      flex: 1;
+      min-width: 100%;
+    }
+    .col3 {
+      flex: 1;
+      min-width: 100%;
+    }
   }
 
   .column {
@@ -33,13 +78,19 @@
     justify-content: center;
   }
 
+  @media (min-width: 1000px) {
+    .card .btn-webcam {
+      font-size: 1.25rem;
+    }
+  }
+
   .card {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 0.5rem;
     border-radius: 1rem;
     box-shadow: 0px 0px 0px 12px rgba(73, 109, 149, 0.3),
       0px 0px 0px 8px rgba(255, 255, 255, 0.2);
-    width: 80%;
+    width: 100%;
     height: 100%;
     min-height: 400px;
   }
@@ -52,6 +103,18 @@
   .card-title {
     font-size: 1.25rem;
     color: black;
+  }
+
+  @media (min-width: 1001px) and (max-width: 1439px) {
+    .card-title {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .card-title {
+      font-size: 1.75rem;
+    }
   }
 
   .card .btn-webcam {
@@ -72,6 +135,10 @@
 
   canvas {
     border-radius: 1rem;
+  }
+
+  .summary-height-adjust {
+    max-height: 200px;
   }
 
   @keyframes popIn {
@@ -149,44 +216,28 @@
     text-align: center;
   }
 
-  @media (min-width: 880px) and (max-width: 999px) {
-    .inner-grid {
-      grid-template-columns: repeat(2, minmax(400px, 1fr));
-      grid-template-areas:
-        "col1 col2"
-        "col3 col3";
-    }
-
-    .col1 {
-      grid-area: col1;
-    }
-    .col2 {
-      grid-area: col2;
-    }
-    .col3 {
-      grid-area: col3;
-    }
+  /* #region - Footer */
+  .footer {
+    background: rgb(27, 44, 69);
+    color: white;
+    padding: 1rem;
+    width: 100%;
+    position: relative;
   }
 
-  @media (min-width: 1000px) {
-    .inner-grid {
-      grid-template-columns: 40% 40% 20%;
-      grid-template-areas: "col1 col2 col3";
-    }
-    .card .btn-webcam {
-      font-size: 1.25rem;
-    }
+  .footer-content {
+    text-align: center;
+    width: 100%;
   }
 
-  @media (min-width: 1001px) and (max-width: 1439px) {
-    .card-title {
-      font-size: 1.5rem;
-    }
+  .footer-text {
+    font-size: 0.875rem;
+    text-align: center;
+    color: #ccc;
   }
 
-  @media (min-width: 1440px) {
-    .card-title {
-      font-size: 1.75rem;
-    }
+  .footer-name {
+    color: #bb86fc;
   }
+  /* #endregion */
 }
